@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_share"
+        android:icon="@drawable/ic_share"
+        android:title="分享"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item_star"
+        android:icon="@drawable/ic_star"
+        android:title="收藏"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item_comment"
+        android:icon="@drawable/ic_comment"
+        android:title="评论"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/item_thumb"
+        android:icon="@drawable/ic_thumb"
+        android:title="赞"
+        app:showAsAction="always|withText" />
+</menu>
