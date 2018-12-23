@@ -9,29 +9,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.twt.zhihu.zhihudaily.Presenter.ListAdapter;
 import com.twt.zhihu.zhihudaily.Model.MainBean;
-import com.twt.zhihu.zhihudaily.Presenter.NetRequest;
+import com.twt.zhihu.zhihudaily.Model.MainModel;
+import com.twt.zhihu.zhihudaily.Presenter.MainContract;
+import com.twt.zhihu.zhihudaily.Presenter.MainPresenter;
 import com.twt.zhihu.zhihudaily.R;
+
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainContract.UIview {
     private RecyclerView recyclerView;
     public ListAdapter listAdapter;
     public SwipeRefreshLayout refreshLayout;
     public MainBean bean = new MainBean();
     public boolean loading = false;
-    NetRequest netRequest = new NetRequest(this);
+    private MainContract.ListPresenter presenter = new MainPresenter(this);
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        netRequest.getList();
+        presenter.getList();
     }
 
     public void initLayout() {
-        listAdapter = new ListAdapter(this,bean);
+        listAdapter = new ListAdapter(this, bean);
         recyclerView = findViewById(R.id.rv);
         refreshLayout = findViewById(R.id.swipe);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -43,36 +48,38 @@ public class MainActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                netRequest.getList();
+                presenter.getList();
             }
         });
     }
 
-
+    @Override
     public void setData(MainBean bean) {
         this.bean = bean;
     }
 
-    public void Loading(){
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            int lastVisibleItemPosition =((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-            if (newState == RecyclerView.SCROLL_STATE_IDLE
-                    && Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 1
-                    && lastVisibleItemPosition + 1 == recyclerView.getAdapter().getItemCount()
-                    && !loading) {
-                loadMore();
+
+    public void Loading() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                int lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 1
+                        && lastVisibleItemPosition + 1 == recyclerView.getAdapter().getItemCount()
+                        && !loading) {
+                    loadMore();
+                }
             }
-        }
-        void loadMore(){
-            netRequest.getLoad(bean.date);
-        }
-    });
-}
+
+            void loadMore() {
+                presenter.getLoad(bean.date);
+            }
+        });
+    }
 
 
     @Override
@@ -81,6 +88,24 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void initView() {
+        initLayout();
+        refresh();
+        Loading();
+        listAdapter.mainBeanList.clear();
+        listAdapter.addData(bean);
+        refreshLayout.setRefreshing(false);
+        listAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateView() {
+        listAdapter.addData(bean);
+        listAdapter.notifyDataSetChanged();
+        loading = false;
+    }
 }
 
 

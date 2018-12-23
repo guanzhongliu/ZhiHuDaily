@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private Context context;
-    List<MainBean> mainBeanList;
+    public List<MainBean> mainBeanList;
 
     private static final int HEADER = 0;
     private static final int LIST = 1;
@@ -35,7 +35,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mainBeanList.add(latestBean);
     }
 
-    void addData(MainBean latestBean) {
+    public void addData(MainBean latestBean) {
         mainBeanList.add(latestBean);
     }
 

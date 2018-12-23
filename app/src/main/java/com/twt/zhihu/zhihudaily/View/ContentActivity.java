@@ -8,14 +8,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.twt.zhihu.zhihudaily.Model.ContentBean;
-import com.twt.zhihu.zhihudaily.Presenter.NewsRequest;
 import com.twt.zhihu.zhihudaily.R;
 
 public class ContentActivity extends AppCompatActivity {
     WebView webView;
     String id;
-    //NewsRequest newsRequest = new NewsRequest(this);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +25,8 @@ public class ContentActivity extends AppCompatActivity {
             id = b.getString("id");
         }
         webView.loadUrl("http://daily.zhihu.com/story/" + id);
-
-        //newsRequest.getNews(id);
     }
 
-    public void setData(ContentBean data) {
-        webView.loadDataWithBaseURL(null,data.body,"text/html", "UTF-8",null);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSettings.setBlockNetworkImage(false);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

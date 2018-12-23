@@ -1,4 +1,4 @@
-package com.twt.zhihu.zhihudaily.Model;
+package com.twt.zhihu.zhihudaily.NetService;
 
 import com.twt.zhihu.zhihudaily.Model.MainBean;
 import com.twt.zhihu.zhihudaily.Model.ContentBean;
@@ -14,7 +14,4 @@ public interface RetrofitApi {
 
     @GET("news/before/{date}")
     Call<MainBean> getList(@Path("date") String date);
-
-    @GET("news/{id}")
-    Call<ContentBean> getNews(@Path("id") String id);
 }
