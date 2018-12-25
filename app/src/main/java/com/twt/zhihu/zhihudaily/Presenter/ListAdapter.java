@@ -24,7 +24,7 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private Context context;
     public List<MainBean> mainBeanList;
-
+    private int times = 0;
     private static final int HEADER = 0;
     private static final int LIST = 1;
     private static final int ITEM_DATE = 0;
@@ -136,7 +136,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            //如果是头部Banner，下面控件为空
             item_date = itemView.findViewById(R.id.item_date);
             cardView = itemView.findViewById(R.id.cardview);
             textView = itemView.findViewById(R.id.tv);

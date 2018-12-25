@@ -19,18 +19,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainModel {
 
     private static final String BASE_URL = "https://news-at.zhihu.com/api/4/";
-    OkHttpClient okHttpClient = new OkHttpClient.Builder()
+    private OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .retryOnConnectionFailure(false)
             .connectTimeout(7777, TimeUnit.MILLISECONDS)
             .build();
 
-    Retrofit retrofit = new Retrofit.Builder()
+    private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build();
 
-    RetrofitApi api = retrofit.create(RetrofitApi.class);
+    private RetrofitApi api = retrofit.create(RetrofitApi.class);
 
     public Call<MainBean> refresh() {
         return api.getList();

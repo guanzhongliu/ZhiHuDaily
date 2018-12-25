@@ -6,12 +6,13 @@ import android.widget.Toast;
 
 import com.twt.zhihu.zhihudaily.Model.MainBean;
 import com.twt.zhihu.zhihudaily.Model.MainModel;
+import com.twt.zhihu.zhihudaily.View.MainActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainPresenter implements MainContract.ListPresenter{
+public class MainPresenter implements MainContract.ListPresenter {
     /**
      * presenter应该持有 view 层和 model 层的引用
      * 这样才能完成两层之间的逻辑交互
@@ -19,6 +20,7 @@ public class MainPresenter implements MainContract.ListPresenter{
      */
     private MainContract.UIview uiView;
     private MainModel mainModel = new MainModel();
+    private int time = 1;
 
     /**
      * presenter 层对应的类持有的 view 层对应的类是没有办法在 presenter 内部实例化的（此时的view是有方法但是没有具体实现的接口）
@@ -27,10 +29,9 @@ public class MainPresenter implements MainContract.ListPresenter{
      * 所以 presenter 的构造函数中应该传入 view
      * model 层是有具体实现类的，并且已经在 presenter 类的内部实例化了，这样才能拿到 model 的具体数据，进行操作
      */
-    public MainPresenter(MainContract.UIview uiView){
+    public MainPresenter(MainContract.UIview uiView) {
         this.uiView = uiView;
     }
-
 
 
     /**
@@ -66,8 +67,25 @@ public class MainPresenter implements MainContract.ListPresenter{
 
             @Override
             public void onFailure(@NonNull Call<MainBean> call, @NonNull Throwable t) {
-                //uiView.loading = false;
                 Toast.makeText((Context) uiView, "Fail,请检查您的网络设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void getInit() {
+        Call<MainBean> call = mainModel.refresh();
+        call.enqueue(new Callback<MainBean>() {
+            @Override
+            public void onResponse(@NonNull Call<MainBean> call, @NonNull Response<MainBean> response) {
+                uiView.setData(response.body());
+                uiView.firstInitView();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable throwable) {
+                Toast.makeText((Context) uiView, "Fail,请检查您的网络设置", Toast.LENGTH_SHORT).show();
+                throwable.printStackTrace();
             }
         });
     }

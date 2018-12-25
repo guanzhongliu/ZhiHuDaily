@@ -36,6 +36,7 @@ public class BannerAdapter extends RelativeLayout implements ViewPager.OnPageCha
     private final static int RADIUS = 20;             //原点直径
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public BannerAdapter(Context context) {
         this(context, null);
     }

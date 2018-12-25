@@ -25,14 +25,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.UIvi
     public ListAdapter listAdapter;
     public SwipeRefreshLayout refreshLayout;
     public MainBean bean = new MainBean();
-    public boolean loading = false;
     private MainContract.ListPresenter presenter = new MainPresenter(this);
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter.getList();
+        presenter.getInit();
+
     }
 
     public void initLayout() {
@@ -70,13 +70,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.UIvi
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 1
                         && lastVisibleItemPosition + 1 == recyclerView.getAdapter().getItemCount()
-                        && !loading) {
-                    loadMore();
+                        ) {
+                    presenter.getLoad(bean.date);
                 }
-            }
-
-            void loadMore() {
-                presenter.getLoad(bean.date);
             }
         });
     }
@@ -91,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.UIvi
     @Override
     public void initView() {
         initLayout();
-        refresh();
-        Loading();
         listAdapter.mainBeanList.clear();
         listAdapter.addData(bean);
         refreshLayout.setRefreshing(false);
@@ -104,7 +98,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.UIvi
     public void updateView() {
         listAdapter.addData(bean);
         listAdapter.notifyDataSetChanged();
-        loading = false;
+    }
+
+    @Override
+    public void firstInitView() {
+        initLayout();
+        refresh();
+        Loading();
+        listAdapter.mainBeanList.clear();
+        listAdapter.addData(bean);
+        refreshLayout.setRefreshing(false);
+        listAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
     }
 }
 
