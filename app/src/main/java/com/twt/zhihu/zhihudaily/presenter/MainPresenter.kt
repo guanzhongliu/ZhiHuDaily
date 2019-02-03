@@ -1,12 +1,21 @@
 package com.twt.zhihu.zhihudaily.presenter
 
 import android.content.Context
+import android.os.Message
 import android.widget.Toast
 import com.twt.zhihu.zhihudaily.model.MainBean
 import com.twt.zhihu.zhihudaily.model.MainModel
+import com.twt.zhihu.zhihudaily.view.MainActivity
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
+import java.util.logging.Handler
+
 
 class MainPresenter
 /**
@@ -32,46 +41,54 @@ class MainPresenter
      */
     override fun getList() {
         val call = mainModel.refresh()
-        call.enqueue(object : Callback<MainBean> {
-            override fun onResponse(call: Call<MainBean>, response: Response<MainBean>) {
-                uiView.setData(response.body()!!)
-                uiView.initView()
-            }
+        launch{
+            val response: MainBean?
+            try {
+                response = call.execute( ).body()
+                uiView.setData(response!!)
+                launch (UI){
+                    uiView.initView()
+                }
 
-            override fun onFailure(call: Call<MainBean>, throwable: Throwable) {
-                Toast.makeText(uiView as Context, "Fail,请检查您的网络设置", Toast.LENGTH_SHORT).show()
-                throwable.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        })
+        }
     }
 
     override fun getLoad(date: String) {
         val call = mainModel.update(date)
-        call.enqueue(object : Callback<MainBean> {
-            override fun onResponse(call: Call<MainBean>, response: Response<MainBean>) {
-                uiView.setData(response.body()!!)
-                uiView.updateView()
-            }
+        launch{
+            val response: MainBean?
+            try {
+                response = call.execute( ).body()
+                uiView.setData(response!!)
+                launch (UI){
+                    uiView.updateView()
+                }
 
-            override fun onFailure(call: Call<MainBean>, t: Throwable) {
-                Toast.makeText(uiView as Context, "Fail,请检查您的网络设置", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        })
+        }
     }
 
     override fun getInit() {
         val call = mainModel.refresh()
-        call.enqueue(object : Callback<MainBean> {
-            override fun onResponse(call: Call<MainBean>, response: Response<MainBean>) {
-                uiView.setData(response.body()!!)
-                uiView.firstInitView()
-            }
+        launch{
+            val response: MainBean?
+            try {
+                response = call.execute( ).body()
+                uiView.setData(response!!)
+                launch (UI){
+                    uiView.firstInitView()
+                }
 
-            override fun onFailure(call: Call<MainBean>, throwable: Throwable) {
-                Toast.makeText(uiView as Context, "Fail,请检查您的网络设置", Toast.LENGTH_SHORT).show()
-                throwable.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        })
+        }
+
     }
 
 }

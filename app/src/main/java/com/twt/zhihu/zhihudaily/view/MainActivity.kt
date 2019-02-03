@@ -1,4 +1,4 @@
-package com.twt.zhihu.zhihudaily.View
+package com.twt.zhihu.zhihudaily.view
 
 import android.os.Build
 import android.os.Bundle
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), MainContract.UIview {
 
     }
 
-    fun initLayout() {
+    private fun initLayout() {
         listAdapter = ListAdapter(this, bean)
         recyclerView = findViewById(R.id.rv)
         refreshLayout = findViewById(R.id.swipe)
@@ -41,16 +41,17 @@ class MainActivity : AppCompatActivity(), MainContract.UIview {
         recyclerView!!.adapter = listAdapter
     }
 
-    fun refresh() {
+    private fun refresh() {
         refreshLayout.setOnRefreshListener { presenter.getList() }
     }
 
-    override fun setData(bean: MainBean) {
-        this.bean = bean
+    override fun setData(mainBean: MainBean) {
+        this.bean = mainBean
+
     }
 
 
-    fun Loading() {
+    private fun loading() {
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity(), MainContract.UIview {
     override fun firstInitView() {
         initLayout()
         refresh()
-        Loading()
+        loading()
         listAdapter.mainBeanList.clear()
         listAdapter.addData(bean)
         refreshLayout.isRefreshing = false

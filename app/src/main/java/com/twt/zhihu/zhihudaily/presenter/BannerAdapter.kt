@@ -25,7 +25,7 @@ import com.squareup.picasso.Picasso
 
 import com.twt.zhihu.zhihudaily.R
 import com.twt.zhihu.zhihudaily.model.MainBean
-import com.twt.zhihu.zhihudaily.View.ContentActivity
+import com.twt.zhihu.zhihudaily.view.ContentActivity
 
 
 class BannerAdapter @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

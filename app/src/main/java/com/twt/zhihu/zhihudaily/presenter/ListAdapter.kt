@@ -16,11 +16,16 @@ import com.squareup.picasso.Picasso
 import com.twt.zhihu.zhihudaily.R
 import com.twt.zhihu.zhihudaily.model.MainBean
 
-import com.twt.zhihu.zhihudaily.View.ContentActivity
+import com.twt.zhihu.zhihudaily.view.ContentActivity
 
 import java.util.ArrayList
 
 class ListAdapter(private val context: Context, latestBean: MainBean) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+    companion object {
+        private const val HEADER = 0
+        private const val LIST = 1
+        private const val ITEM_DATE = 0
+    }
     var mainBeanList: MutableList<MainBean> = ArrayList()
 
     init {
@@ -116,12 +121,6 @@ class ListAdapter(private val context: Context, latestBean: MainBean) : Recycler
         var item_date: TextView? = view.findViewById(R.id.item_date)
         var cardView: View? = view.findViewById(R.id.cardview)
 
-    }
-
-    companion object {
-        private const val HEADER = 0
-        private const val LIST = 1
-        private const val ITEM_DATE = 0
     }
 
 }
